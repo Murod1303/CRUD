@@ -1,4 +1,4 @@
-import { Home } from "@/pages";
+import { Home, SignIn, SignUp } from "@/pages";
 
 export const publicRoutes: {
   path: string;
@@ -7,5 +7,16 @@ export const publicRoutes: {
   {
     path: "/",
     element: <Home />,
+  },
+];
+
+export const authRoutes = [
+  {
+    path: "/sign-in",
+    element: <SignIn />,
+  },
+  {
+    path: "/sign-up",
+    element: <SignUp />,
   },
 ];
