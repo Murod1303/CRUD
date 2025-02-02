@@ -5,3 +5,9 @@ export type AntdInputPropsType = {
   placeholder: string;
   className?: string;
 };
+
+export type AuthFormInputTypes = {
+  fullName?: string;
+  login?: string;
+  password?: string;
+};

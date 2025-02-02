@@ -1,15 +1,30 @@
 import AntdInput from "@/components/ui/AntdInput";
+import instance from "@/services/interceptor";
+import { AuthFormInputTypes } from "@/types/uiTypes";
 import { Form, FormProps } from "antd";
-import { NavLink } from "react-router-dom";
-
-type FieldType = {
-  name?: string;
-  password?: string;
-};
+import Cookies from "js-cookie";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const SingIn = () => {
-  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    console.log("Success:", values);
+  const navigate = useNavigate();
+
+  const onFinish: FormProps<AuthFormInputTypes>["onFinish"] = async (
+    values
+  ) => {
+    try {
+      const response = await instance.post("auths/sign-in", values);
+      if (response.status === 200) {
+        navigate("/");
+        console.log(response);
+        Cookies.set("CRUDToken", response.data, {
+          expires: 1,
+          // secure: true,
+          // sameSite: "Strict",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const [form] = Form.useForm();
@@ -25,7 +40,7 @@ const SingIn = () => {
       <div className="p-6 pb-4">
         <h3 className="font-bold text-[36px]">Вход</h3>
         <AntdInput
-          name={"name"}
+          name={"login"}
           label={"Логин"}
           rules={"Required"}
           placeholder="Введите логин"
@@ -39,13 +54,13 @@ const SingIn = () => {
           className="mb-5"
         />
         <NavLink to="/sign-up" className="text-[#1890FF] text-sm block">
-          Вход
+          Регистрация
         </NavLink>
       </div>
-      <hr className="block" />
+      <span className="block bg-[#D9D9D9] h-0.5"></span>
       <div className="p-2.5 flex items-center justify-center">
         <button className="py-1 px-4 rounded-sm bg-[#7CB305] text-sm leading-7 text-white">
-          Регистрировать
+          Вход
         </button>
       </div>
     </Form>
